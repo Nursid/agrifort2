@@ -1,37 +1,87 @@
-import { Link } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
-import { useState, useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import { Leaf, Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
-  const { cartCount } = useContext(CartContext);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigation = [
+    { name: 'About Us', href: '#about' },
+    { name: 'Leadership People', href: '#leadership' },
+    { name: 'Our Portfolio', href: '#portfolio' },
+    { name: 'Family Vibes', href: '#family' },
+    { name: 'AgriFort Highlights', href: '#highlights' },
+  ];
   return (
-    <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-    <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div>
-        <Link to="/" className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-         Product Listing Page
-        </Link>
-        <p className="text-gray-600 text-sm mt-1">Discover amazing deals on quality items</p>
+    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-md z-50">
+    <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center h-20">
+        {/* Logo */}
+        <div className="flex items-center space-x-2">
+          <div className="bg-gradient-to-br from-green-600 to-emerald-700 p-2 rounded-lg">
+            <Leaf className="h-8 w-8 text-white" />
+          </div>
+          <span className="text-2xl font-bold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+            AgriFort
+          </span>
+        </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex space-x-8">
+          {navigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200"
+            >
+              {item.name}
+            </a>
+          ))}
+        </div>
+
+        {/* CTA Buttons */}
+        <div className="hidden md:flex items-center space-x-4">
+          <a href="#registration" className="text-green-700 hover:text-green-800 font-medium">
+            Registration Centre
+          </a>
+          <a href="#login" className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-full hover:shadow-lg transition-all duration-200">
+            Workplace Login
+          </a>
+        </div>
+
+        {/* Mobile menu button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+        >
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </div>
-      
-      <div className="flex gap-6">
-      <div className="relative">
-      <Link to="/cart" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2">
-          <ShoppingCart className="w-5 h-5" />
-          Cart
-          {cartCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-bounce">
-              {cartCount}
-            </span>
-          )}
-        </Link>
+    </nav>
+
+    {/* Mobile Navigation */}
+    {mobileMenuOpen && (
+      <div className="md:hidden bg-white border-t">
+        <div className="px-4 py-4 space-y-3">
+          {navigation.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="block text-gray-700 hover:text-green-600 font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              {item.name}
+            </a>
+          ))}
+          <div className="pt-4 border-t space-y-2">
+            <a href="#registration" className="block text-green-700 font-medium py-2">
+              Registration Centre
+            </a>
+            <a href="#login" className="block bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-full text-center">
+              Workplace Login
+            </a>
+          </div>
+        </div>
       </div>
-            <Link to="/admin/login" className="bg-gradient-to-r from-gray-900 to-gray-700 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2">
-        Admin Login
-      </Link>
-    </div>
-    </div>
-  </div>
+    )}
+  </header>
   );
 }
